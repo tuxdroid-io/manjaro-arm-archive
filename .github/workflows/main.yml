@@ -1,0 +1,21 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      API_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+    steps:
+      #- uses: actions/checkout@v2
+      - name: Setup upterm session
+        uses: lhotari/action-upterm@v1
+      
+      - name: Script
+        run: |
+        echo Add other actions to build,
+          echo test, and deploy your project.
