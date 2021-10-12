@@ -14,4 +14,4 @@ jobs:
       #- uses: actions/checkout@v2
       
       - name: Script
-        run: bash job.sh
+        run: ls && bash ./job.sh
