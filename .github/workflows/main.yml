@@ -12,10 +12,6 @@ jobs:
       
     steps:
       #- uses: actions/checkout@v2
-      - name: Setup upterm session
-        uses: lhotari/action-upterm@v1
       
       - name: Script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+        run: bash job.sh
