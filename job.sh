@@ -2,8 +2,7 @@
 _target="${PWD}/manjaro" && mkdir -p "$_target"
 _tmp="$PWD/.tmp" && mkdir -p "$_tmp";
 _log_file="$_tmp/.logfile";
-echo test
-exit
+
 function sync_pkgs() {
 	echo "===== Syncing packages ...";
 
@@ -21,7 +20,8 @@ function sync_pkgs() {
 		--temp-dir="${_tmp}" --ignore-existing \
 		--exclude='*.sig' \
 		--exclude=pool/overlay --exclude=pool/sync \
-		${_source} "${_target}" 2>/dev/null
+		${_source} "${_target}" 2>/dev/null \
+		| tee "$_log_file";
 
 		# --exclude=stable --exclude=stable-staging \
 		# --exclude=unstable --exclude=testing \
