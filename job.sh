@@ -20,8 +20,7 @@ function sync_pkgs() {
 		--temp-dir="${_tmp}" --ignore-existing \
 		--exclude='*.sig' \
 		--exclude=pool/overlay --exclude=pool/sync \
-		${_source} "${_target}" 2>/dev/null \
-		| tee "$_log_file";
+		${_source} "${_target}" 2>/dev/null
 
 		# --exclude=stable --exclude=stable-staging \
 		# --exclude=unstable --exclude=testing \
