@@ -2,7 +2,8 @@
 _target="${PWD}/manjaro" && mkdir -p "$_target"
 _tmp="$PWD/.tmp" && mkdir -p "$_tmp";
 _log_file="$_tmp/.logfile";
-
+echo test
+exit
 function sync_pkgs() {
 	echo "===== Syncing packages ...";
 
