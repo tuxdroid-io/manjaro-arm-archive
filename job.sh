@@ -32,6 +32,7 @@ function upload_pkgs() {
 	echo "===== Uploading synced packages ...";
 	gh auth login --with-token <<<"$API_GITHUB_TOKEN";
 	(
+	until test -e "$_log_file"; do sleep 3; done
 	while read -r _line; do
 		gh release upload "$_target/${_line%/*}/.~tmp~/${_line##*/}";
 	done < <(tail -f "$_log_file" | grep -v '/$')
