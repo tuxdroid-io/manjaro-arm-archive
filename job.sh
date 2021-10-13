@@ -1,4 +1,6 @@
 #!/bin/bash
+sudo apt install -y rsync
+_source="rsync://mirrorservice.org/repo.manjaro.org/repos/pool/";
 _target="${PWD}/registry" && mkdir -p "$_target"
 _tmp="$PWD/.tmp" && mkdir -p "$_tmp";
 _log_file="$_tmp/.logfile";
@@ -6,7 +8,6 @@ _log_file="$_tmp/.logfile";
 function sync_pkgs() {
 	echo "===== Syncing packages ...";
 
-	local _source="rsync://mirrorservice.org/repo.manjaro.org/repos/pool/";
 
 	if ! stty &>/dev/null; then
 		local _extra_args+=("-q");
@@ -31,8 +32,12 @@ function sync_pkgs() {
 function upload_pkgs() {
 	echo "===== Uploading synced packages ...";
 	gh auth login --with-token <<<"$API_GITHUB_TOKEN";
-	gh release upload $(grep -v '/$' "$_log_file" | xargs);
+	(
+	while read -r _line; do
+		gh release upload "$_target/${_line%/*}/.~tmp~/${_line##*/}";
+	done < <(tail -f "$_log_file" | grep -v '/$')
+	) &
 }
 
-sync_pkgs;
 upload_pkgs;
+sync_pkgs;
