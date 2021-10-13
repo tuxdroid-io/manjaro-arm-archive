@@ -30,6 +30,7 @@ function sync_pkgs() {
 function upload_pkgs() {
 	echo "===== Uploading synced packages ...";
 	gh auth login --with-token <<<"$API_GITHUB_TOKEN";
+	cd registry
 	gh release upload packages $(grep -v '/$' "$_log_file" | xargs) --clobber;
 }
 
