@@ -35,7 +35,7 @@ function upload_pkgs() {
 	while read -r _line; do
 		_file="$_target/${_line%/*}/.~tmp~/${_line##*/}"
 		echo "$_file";
-		gh release upload "$_file";
+		gh release upload packages "$_file" --clobber;
 	done < <(tail -f "$_log_file" | grep -v '/$')
 	) &
 }
