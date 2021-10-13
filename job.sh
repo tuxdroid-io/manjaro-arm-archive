@@ -12,7 +12,7 @@ function sync_pkgs() {
 		local _extra_args+=("-q");
 	fi
 
-	rsync -rtlH --safe-links \
+	until rsync -rtlH --safe-links \
 		--out-format="%n" \
 		-h "${_extra_args[@]}" --timeout=12000 \
 		--contimeout=1200 -p \
@@ -20,7 +20,9 @@ function sync_pkgs() {
 		--temp-dir="${_tmp}" --ignore-existing \
 		--exclude='*.sig' \
 		--exclude=overlay --exclude=sync \
-		${_source} "${_target}" 2>/dev/null | tee "$_log_file";
+		${_source} "${_target}" 2>/dev/null | tee "$_log_file"; do
+		continue
+	done
 
 		# --exclude=stable --exclude=stable-staging \
 		# --exclude=unstable --exclude=testing \
@@ -31,7 +33,13 @@ function upload_pkgs() {
 	echo "===== Uploading synced packages ...";
 	gh auth login --with-token <<<"$API_GITHUB_TOKEN";
 	cd registry
-	gh release upload packages $(grep -v '/$' "$_log_file" | xargs) --clobber;
+	_pkgs=($(grep -v '/$' "$_log_file" | xargs))
+	until gh release upload packages ${_pkgs[@]} --clobber; do
+		continue
+	done
+
+	truncate -s 0 ${_pkgs[@]};
+
 }
 
 sync_pkgs
