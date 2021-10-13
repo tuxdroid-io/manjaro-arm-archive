@@ -1,5 +1,5 @@
 #!/bin/bash
-_target="${PWD}/manjaro" && mkdir -p "$_target"
+_target="${PWD}/registry" && mkdir -p "$_target"
 _tmp="$PWD/.tmp" && mkdir -p "$_tmp";
 _log_file="$_tmp/.logfile";
 
@@ -19,7 +19,7 @@ function sync_pkgs() {
 		--delay-updates --no-motd \
 		--temp-dir="${_tmp}" --ignore-existing \
 		--exclude='*.sig' \
-		--exclude=pool/overlay --exclude=pool/sync \
+		--exclude=overlay --exclude=sync \
 		${_source} "${_target}" 2>/dev/null \
 		| tee "$_log_file";
 
