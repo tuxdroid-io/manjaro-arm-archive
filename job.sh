@@ -20,7 +20,7 @@ function sync_pkgs() {
 		--temp-dir="${_tmp}" --ignore-existing \
 		--exclude='*.sig' \
 		--exclude=overlay --exclude=sync \
-		${_source} "${_target}" 2>/dev/null > "$_log_file";
+		${_source} "${_target}" 2>/dev/null | tee "$_log_file";
 
 		# --exclude=stable --exclude=stable-staging \
 		# --exclude=unstable --exclude=testing \
@@ -30,15 +30,8 @@ function sync_pkgs() {
 function upload_pkgs() {
 	echo "===== Uploading synced packages ...";
 	gh auth login --with-token <<<"$API_GITHUB_TOKEN";
-	(
-	until test -e "$_log_file"; do sleep 1; done
-	while read -r _line; do
-		_file="$_target/${_line%/*}/.~tmp~/${_line##*/}"
-		echo "$_file";
-		gh release upload packages "$_file" --clobber;
-	done < <(tail -f "$_log_file" | grep -v '/$')
-	) &
+	gh release upload packages $(grep -v '/$' "$_log_file" | xargs) --clobber;
 }
 
-upload_pkgs;
-sync_pkgs;
+sync_pkgs
+upload_pkgs
