@@ -1,5 +1,4 @@
 #!/bin/bash
-sudo apt install -y rsync
 _source="rsync://mirrorservice.org/repo.manjaro.org/repos/pool/";
 _target="${PWD}/registry" && mkdir -p "$_target"
 _tmp="$PWD/.tmp" && mkdir -p "$_tmp";
