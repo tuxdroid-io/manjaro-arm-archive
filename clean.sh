@@ -12,4 +12,4 @@ sudo rm -rf "$SWIFT_PATH"
 sudo rm -rf /usr/share/swift
 sudo apt-get clean
 docker rmi $(docker image ls -aq)
-sudo apt-get purge -y --allow-remove-essential $(dpkg-query -Wf '${Package;-40}${Priority}\n' | awk '$2 ~ /optional|extra/ { print $1 }' | grep -vE 'git|rsync|gh')
+#sudo apt-get purge -y --allow-remove-essential $(dpkg-query -Wf '${Package;-40}${Priority}\n' | awk '$2 ~ /optional|extra/ { print $1 }' | grep -vE 'git|rsync|gh')
