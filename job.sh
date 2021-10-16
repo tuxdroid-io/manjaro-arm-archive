@@ -34,11 +34,13 @@ function upload_pkgs() {
 	gh auth login --with-token <<<"$API_GITHUB_TOKEN";
 	cd registry
 	_pkgs=($(grep -v '/$' "$_log_file" | xargs))
-	until gh release upload packages ${_pkgs[@]} --clobber; do
-		continue
-	done
-
-	truncate -s 0 ${_pkgs[@]};
+        
+        for _pkg in ${_pkgs[@]}; do
+	    until gh release upload packages ${_pkg} --clobber \
+                 && truncate -s 0 ${_pkg}; do
+		   continue
+	    done
+        done
 
 }
 
